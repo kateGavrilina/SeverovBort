@@ -11,6 +11,8 @@
 
 const char* const COM_PORT = "COM5";
 const int BAUD_RATE = 115200;
+
+//для использования kx-pult
 extern double X[2000][2];
 extern QVector<double> K;
 
@@ -42,6 +44,7 @@ public slots:
        vn100_getYawPitchRollTrueInertialAcclerationAngularRate(&vn100,&ypr,&inertialAcceleration,&angularRate);
        //vn100_getCalibratedImuMeasurements(&vn100,&magnetic,&inertialAcceleration,&angularRate, &temp);
 
+       //kx-pult
         X[301][0] = ypr.yaw;
         X[302][0] = ypr.pitch;
         X[303][0] = ypr.roll;

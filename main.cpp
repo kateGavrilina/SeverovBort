@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
     x_protocol * xProtocol = new x_protocol(ConfigFile,XI,X);
     //обмен с VectorNav (там внутри пример с примененем X-ов)
     VectorNavProtocol vn100Proto;
+    vn100Proto.start(100);
     //обмен с пультом
     ControlSystem::PC_Protocol *pultProtocol = new ControlSystem::PC_Protocol(ConfigFile,"rov_pult");
     return a.exec();

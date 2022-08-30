@@ -12,6 +12,7 @@
 const char* const COM_PORT = "COM5";
 const int BAUD_RATE = 115200;
 extern double X[2000][2];
+extern QVector<double> K;
 
 class VectorNavProtocol : public QObject
 {
@@ -50,6 +51,7 @@ public slots:
         X[307][0] = angularRate.c0;
         X[308][0] = angularRate.c1;
         X[309][0] = angularRate.c2;
+        X[310][0] = K[1]; //теперь значение этой переменной будет таким же как принятый коэффициент K1
     }
 protected:
     QTimer timer;

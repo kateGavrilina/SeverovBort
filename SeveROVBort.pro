@@ -14,8 +14,7 @@ SOURCES += main.cpp\
           include_vn100/vncp_services.c \
           kx_pult/kx_protocol.cpp\
           kx_pult/qkx_coeffs.cpp\
-          kx_pult/qpiconfig.cpp\
-          vectornavprotocol.cpp
+          kx_pult/qpiconfig.cpp
 
 HEADERS +=include_vn100/*.h \
           udp_protocol.h\

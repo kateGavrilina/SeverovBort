@@ -1,77 +1,8 @@
 #ifndef PULTCONTROLSYSTEMPROTOCOLS_H
 #define PULTCONTROLSYSTEMPROTOCOLS_H
-#include "rovdata.h"
+#include "uv_state.h"
 #include "udp_protocol.h"
-
-#pragma pack(push,1)
-//структура данных, которая передается из Северова в Пульт
-//тут описаны данные, которые Пульт принимает от Северова
-struct ToPult {
-    ToPult(){
-    }
-    ROVData _data;
-    uint checksum;
-};
-
-//структура данных, которая передается из плнировщика в АНПА
-struct FromPult {
-    FromPult(){
-
-    }
-    ControlSystemMode mode; // режим работы СУ
-    uint checksum;
-};
-#pragma pack (pop)
-
-//класс обмена Северов - Пульт, который создается в Пульте
-namespace Pult {
-class PC_Protocol : public QObject, public MetaUdpProtocol {
-    Q_OBJECT
-public:
-    //создание объекта, инициализация портов, но при этом отправка не запущена
-    explicit PC_Protocol(QHostAddress _receiverIP, int _receiverPort, QHostAddress _senderIP,\
-                         int _senderPort,int freq, QObject *parent = 0){
-        udpProtocol = new UdpProtocol <ToPult, FromPult> (_receiverIP,_receiverPort, _senderIP,_senderPort,\
-                                                          freq, parent);
-        connect(timer,SIGNAL(timeout()),SLOT(sendData()));
-        connect(udpProtocol->getReceiveSocket(),SIGNAL(readyRead()),SLOT(receiveData()));
-        set_ip_receiver(udpProtocol->ip_receiver());
-        set_ip_sender (udpProtocol->ip_sender());
-        set_port_receiver(udpProtocol->port_receiver());
-        set_port_sender (udpProtocol->port_sender());
-    }
-
-
-signals:
-    void dataReceived();
-
-public slots:
-
-    //запуск обмена
-    void startExchange(){
-        timer->start(1000/udpProtocol->getFrequency());
-    }
-    //остановить обмен
-    void stopExhange(){
-        timer->stop();
-    }
-    void sendData(){
-        udpProtocol->send_data = send_data;
-        udpProtocol->sendData();
-    }
-    void receiveData(){
-        udpProtocol->receiveData();
-        rec_data = udpProtocol->rec_data;
-        emit dataReceived();
-    }
-public:
-    FromPult send_data;
-    ToPult rec_data;
-    UdpProtocol <ToPult, FromPult> *udpProtocol;
-    bool bindState(){return udpProtocol->bindState();}
-
-};
-} //namespace Pult
+extern double X[2000][2];
 
 //класс обмена АНПА- планировщик, который создается в АНПА
 namespace ControlSystem {
@@ -120,6 +51,21 @@ public slots:
         udpProtocol->receiveData();
         rec_data = udpProtocol->rec_data;
         emit dataReceived();
+        X[400][0] = rec_data.controlData.depth;
+        X[401][0] = rec_data.controlData.lag;
+        X[402][0] = rec_data.controlData.march;
+        X[403][0] = rec_data.controlData.pitch;
+        X[404][0] = rec_data.controlData.roll;
+        X[405][0] = rec_data.controlData.yaw;
+        X[406][0] = rec_data.controlContoursFlags.depth;
+        X[407][0] = rec_data.controlContoursFlags.lag;
+        X[408][0] = rec_data.controlContoursFlags.march;
+        X[409][0] = rec_data.controlContoursFlags.pitch;
+        X[410][0] = rec_data.controlContoursFlags.roll;
+        X[411][0] = rec_data.controlContoursFlags.yaw;
+        X[412][0] = static_cast<unsigned char>(rec_data.cSMode);
+        X[413][0] ++;
+
     }
 public:
     ToPult send_data;

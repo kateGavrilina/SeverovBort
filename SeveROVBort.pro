@@ -9,7 +9,7 @@ CONFIG -= app_bundle
 
 TEMPLATE = app
 
-SOURCES += main.cpp\
+SOURCES += *.cpp\
           include_vn100/vn100.c\
           include_vn100/vncp_services.c \
           kx_pult/kx_protocol.cpp\
@@ -17,13 +17,10 @@ SOURCES += main.cpp\
           kx_pult/qpiconfig.cpp
 
 HEADERS +=include_vn100/*.h \
-          udp_protocol.h\
-          rovdata.h\
-          pultcontrolsystemprotocols.h\
+          *.h\
           kx_pult/kx_protocol.h\
           kx_pult/qkx_coeffs.h\
-          kx_pult/qpiconfig.h\
-          vectornavprotocol.h
+          kx_pult/qpiconfig.h
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
